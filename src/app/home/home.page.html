@@ -1,20 +1,61 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
+<ion-header>
+  <ion-toolbar color="warning">
     <ion-title>
-      Blank
+      <b>BangRey Music Player</b>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+<ion-content>
+  <ion-list>
+    <ion-item button *ngFor="let track of playlist" (click)="start(track)">
+      <ion-label [color]="track === activeTrack ? 'warning' : 'light'">
+        {{ track.name }}
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
+
+<ion-footer *ngIf="activeTrack">
+  <ion-toolbar>
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        {{ activeTrack.name }}
+      </ion-col>
+      <ion-col size="12">
+        <ion-range
+          #range
+          [(ngModel)]="progress"
+          max="100"
+          color="warning"
+          (touchend)="seek()"
+          (mouseup)="seek"
+        ></ion-range>
+      </ion-col>
+      <ion-col size="12" class="ion-text-center">
+        <ion-button fill="clear" (click)="prev()" color="dark">
+          <ion-icon slot="icon-only" name="play-back"></ion-icon>
+        </ion-button>
+        <ion-button
+          fill="clear"
+          (click)="togglePlayer(false)"
+          *ngIf="!isPlaying"
+          color="dark"
+        >
+          <ion-icon slot="icon-only" name="play"></ion-icon>
+        </ion-button>
+        <ion-button
+          fill="clear"
+          (click)="togglePlayer(true)"
+          *ngIf="isPlaying"
+          color="dark"
+        >
+          <ion-icon slot="icon-only" name="pause"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" (click)="next()" color="dark">
+          <ion-icon slot="icon-only" name="play-forward"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>
